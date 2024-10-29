@@ -80,4 +80,6 @@ int main() {
 
     cout << "Измененный массив:" << endl;
     printArray(array);
+
+    cout << "Дело сделано" << endl;
 }
