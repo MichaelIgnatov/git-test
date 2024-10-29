@@ -1,0 +1,85 @@
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
+#include <limits>
+
+using namespace std;
+
+// Функция для вывода массива
+void printArray(const vector<vector<int>>& array) {
+    for (const auto& row : array) {
+        for (int value : row) {
+            cout << value << "\t";
+        }
+        cout << endl;
+    }
+}
+
+// Функция для перестановки столбцов
+void rearrangeColumns(vector<vector<int>>& array, int m, int n) {
+    int iter;
+    if (n % 2 == 0) {
+        iter = n / 2 - 1;
+    } else {
+        iter = n / 2;
+    }
+    
+    int permutations = n - 2;
+    for (int q = 0; q < iter; q++) {
+        int index1 = n - 1;
+        int index2 = n - 2;
+        for (int i = 0; i < permutations; i++) {
+            for (int row = 0; row < m; ++row) {
+            // Обмен значениями между столбцами i и j
+                array[row][index1] ^= array[row][index2];
+                array[row][index2] ^= array[row][index1];
+                array[row][index1] ^= array[row][index2];
+            }
+            index1 -= 1;
+            index2 -= 1;
+        }
+        permutations -= 2;
+    }
+}
+
+int main() {
+    int m, n;
+    cout << "Введите количество строк (Целое неотрицательное число): ";
+    while (!(cin >> m) || (m <= 0)) {
+        cout << "Неккоректный ввод, повторите попытку.";
+        cin.clear(); 
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+    cout << "Введите количество столбцов (Целое неотрицательное число): ";
+    while (!(cin >> n) || (n <= 0)) {
+        cout << "Неккоректный ввод, повторите попытку.";
+        cin.clear(); 
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+
+    vector<vector<int>> array(m, vector<int>(n));
+
+    // Инициализация генератора случайных чисел
+    srand(time(nullptr));
+
+    // Заполнение массива случайными числами от 1 до n*m
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+            array[i][j] = std::rand() % (n * m) + 1;
+        }
+    }
+
+    cout << "Исходный массив:" << endl;
+    printArray(array);
+
+    // Перестановка столбцов
+    if (n >= 3) {
+        rearrangeColumns(array, m, n);
+    }
+
+    cout << "Измененный массив:" << endl;
+    printArray(array);
+
+    return 0;
+}
